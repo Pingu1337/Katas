@@ -21,16 +21,6 @@ namespace Scheduler.Models
             Applicant = null;
         }
 
-        public bool lunch(Meeting meeting)
-        {
-
-            int meetingHour = meeting.Start.Hour;
-            int meetingMinute = meeting.Start.Minute;
-            bool meetingIsDuringLunchHour = meetingHour.Equals(12);
-            bool meetingIsDuringLunchMinute = meetingMinute.Equals(00);
-            return !(meetingIsDuringLunchHour || meetingIsDuringLunchMinute);
-        }
-
         public bool Overlap(Meeting meeting)
         {
             bool endIsBefore = (Start + Duration) < meeting.Start;
