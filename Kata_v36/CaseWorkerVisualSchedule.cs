@@ -53,7 +53,7 @@ namespace Scheduler
 
         private void Button_Add_Click(object sender, EventArgs e)
         {
-            
+
             try
             {
                 dateTimePicker.Value += TimeSpan.FromMilliseconds(1);
@@ -65,19 +65,24 @@ namespace Scheduler
             {
                 MessageBoxButtons buttons = MessageBoxButtons.YesNo;
                 string message = exception.Message + "\n Do you want to move up the meeting?";
-                string caption = "Error";
+                string caption = "Meeting Overlapping";
                 DialogResult result = MessageBox.Show(message, caption, buttons);
                 if (result == DialogResult.Yes)
                 {
-                        dateTimePicker.Value = _caseWorker.Meetings.Last().Start;
-                        dateTimePicker.Value += TimeSpan.FromMinutes(60);
-                        _caseWorker.MoveUpMeeting();
-                        RefreshDisplayedMeetings();
-                        
+                    dateTimePicker.Value = _caseWorker.Meetings.Last().Start;
+                    dateTimePicker.Value += TimeSpan.FromMinutes(60);
+                    _caseWorker.MoveUpMeeting();
+                    RefreshDisplayedMeetings();
+
                 }
             }
-
-            
+            catch (MeetingDuringLunchException exception)
+            {
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                string message = exception.Message + "\n";
+                string caption = "Lunch Hour Error";
+                DialogResult result = MessageBox.Show(message, caption, buttons);
+            }
 
         }
 

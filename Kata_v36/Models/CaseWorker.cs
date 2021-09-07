@@ -33,8 +33,8 @@ namespace Scheduler.Models
         public List<Meeting> Meetings;
         public DateTime startTimeKeeperDateTime;
         public TimeSpan durationTimeKeeperDateTime;
-        
 
+        
 
         public CaseWorker()
         {
@@ -53,6 +53,7 @@ namespace Scheduler.Models
         public void NewDateAdded(DateTime start)
         {
             Meeting newMeeting = new Meeting(start);
+            bool lunch = newMeeting.Start.Hour.Equals(12) && newMeeting.Start.Minute.Equals(30);
 
             // TODO kasta MeetingOverlapException om två möten överlappar
 
@@ -61,6 +62,11 @@ namespace Scheduler.Models
                 if (meeting.Overlap(newMeeting))
                 {
                     throw new MeetingOverlapException(meeting);
+                }
+                
+                if (lunch)
+                {
+                    throw new MeetingDuringLunchException(newMeeting);
                 }
                 
             }
