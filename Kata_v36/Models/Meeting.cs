@@ -21,6 +21,8 @@ namespace Scheduler.Models
             Applicant = null;
         }
 
+        
+
         public bool Overlap(Meeting meeting)
         {
             bool endIsBefore = (Start + Duration) < meeting.Start;
@@ -31,9 +33,11 @@ namespace Scheduler.Models
 
         public override string ToString()
         {
-            string date = Start.ToString("d'/'M'/'yy");
+            //string date = Start.ToLongDateString() +" "+ Start.ToString("H:mm") + "-" + Start.ToString("H:") + Duration.ToString("%m");
+            string date = Start.ToLongDateString() + " " + Start.ToString("HH:mm") + "-" + Start.Add(Duration).ToString("HH:mm");
+            //string date = Start.ToString("d'/'M'/'yy");
 
-            string info = date;
+            string info = date + " ";
 
             if (Applicant != null)
                 info += " with: " + Applicant.Name;

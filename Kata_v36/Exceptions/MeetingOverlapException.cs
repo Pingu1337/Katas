@@ -9,7 +9,7 @@ namespace Scheduler.Exceptions
 {
     class MeetingOverlapException : SystemException
     {
-        public MeetingOverlapException(Meeting overlappingMeeting) : base("Overlapping meeting at " + overlappingMeeting)
+        public MeetingOverlapException(Meeting overlappingMeeting) : base("Overlapping meeting " + overlappingMeeting)
         {
         }
     }

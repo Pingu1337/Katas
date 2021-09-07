@@ -68,5 +68,10 @@ namespace Scheduler
 
             listBox_Applicants.DataSource = content;
         }
+
+        private void button_RandomlyAssignApplicants_Click_1(object sender, System.EventArgs e)
+        {
+
+        }
     }
 }
