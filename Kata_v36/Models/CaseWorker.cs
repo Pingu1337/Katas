@@ -77,12 +77,16 @@ namespace Scheduler.Models
         {
             Meeting meetingToChange = Meetings[index];
             Meeting attemptMeeting = new Meeting(newStart, meetingToChange.Duration);
-
+            bool lunch = attemptMeeting.Start.Hour.Equals(12) && attemptMeeting.Start.Minute.Equals(30);
             foreach (Meeting meeting in Meetings)
             {
                 if (meeting.Overlap(attemptMeeting))
                 {
                     throw new MeetingOverlapException(meeting);
+                }
+                if (lunch)
+                {
+                    throw new MeetingDuringLunchException(attemptMeeting);
                 }
                 if (meeting == meetingToChange)
                     continue;

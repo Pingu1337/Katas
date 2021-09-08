@@ -19,7 +19,7 @@ namespace Scheduler
 
             foreach (var caseWorker in _scheduler.CaseWorkers)
             {
-                CaseWorkerVisualSchedule caseWorkerVisualSchedule = new CaseWorkerVisualSchedule(caseWorker);
+                CaseWorkerVisualSchedule caseWorkerVisualSchedule = new CaseWorkerVisualSchedule(caseWorker, RefreshFreeSpotsLabel);
                 caseWorkerVisualSchedule.Size = new Size(500, 400);
 
                 flowLayoutPanel_CaseWorkerSchedules.Controls.Add(caseWorkerVisualSchedule);

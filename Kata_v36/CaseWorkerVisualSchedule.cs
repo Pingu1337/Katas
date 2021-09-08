@@ -16,15 +16,17 @@ namespace Scheduler
     public partial class CaseWorkerVisualSchedule : UserControl
     {
         private readonly CaseWorker _caseWorker;
+        private readonly Action _meetingAddedHandler;
 
-        
-        public CaseWorkerVisualSchedule(CaseWorker caseWorker)
+        public CaseWorkerVisualSchedule(CaseWorker caseWorker, Action meetingAddedHandler)
         {
             _caseWorker = caseWorker;
+            _meetingAddedHandler = meetingAddedHandler;
             InitializeComponent();
             DateTime increaseTime = _caseWorker.startTimeKeeperDateTime.AddMinutes(30);
             label_CaseWorkerName.Text = _caseWorker.Name;
             dateTimePicker.Format = DateTimePickerFormat.Custom;
+            
             
 
             button_Add.Click += Button_Add_Click;
@@ -39,14 +41,31 @@ namespace Scheduler
             {
                 int index = listBox_Meetings.SelectedIndex;
                 _caseWorker.ChangeMeeting(index, dateTimePicker.Value);
+                
                 RefreshDisplayedMeetings();
             }
             catch (MeetingOverlapException exception)
             {
                 MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-                string message = exception.Message;
+                string message = exception.Message + "\n Do you want to move up the meeting?";
                 string caption = "Error";
-                MessageBox.Show(message, caption, buttons);
+                DialogResult result = MessageBox.Show(message, caption, buttons);
+                if (result == DialogResult.Yes)
+                {
+                    dateTimePicker.Value = _caseWorker.Meetings.Last().Start;
+                    dateTimePicker.Value += TimeSpan.FromMinutes(60);
+                    _caseWorker.MoveUpMeeting();
+                    _meetingAddedHandler();
+                    RefreshDisplayedMeetings();
+
+                }
+            }
+            catch (MeetingDuringLunchException exception)
+            {
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                string message = exception.Message + "\n";
+                string caption = "Lunch Hour Error";
+                DialogResult result = MessageBox.Show(message, caption, buttons);
             }
 
         }
@@ -59,6 +78,7 @@ namespace Scheduler
                 dateTimePicker.Value += TimeSpan.FromMilliseconds(1);
                 _caseWorker.NewDateAdded(dateTimePicker.Value);
                 dateTimePicker.Value += TimeSpan.FromMinutes(30);
+                _meetingAddedHandler();
                 RefreshDisplayedMeetings();
             }
             catch (MeetingOverlapException exception)
@@ -72,6 +92,7 @@ namespace Scheduler
                     dateTimePicker.Value = _caseWorker.Meetings.Last().Start;
                     dateTimePicker.Value += TimeSpan.FromMinutes(60);
                     _caseWorker.MoveUpMeeting();
+                    _meetingAddedHandler();
                     RefreshDisplayedMeetings();
 
                 }

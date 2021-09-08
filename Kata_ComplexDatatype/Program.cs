@@ -6,9 +6,13 @@ namespace OnlineOrderSystem
 {
     class Program
     {
+        private static List<OnlineOrder> orders;
+
+        // TODO lägg till en dictionary som har nyckeltyp 'string' och värdetyp 'int'
         static void Main(string[] args)
         {
-            //EnterMainLoop();
+            orders = new List<OnlineOrder>();
+            EnterMainLoop();
         }
 
         static void EnterMainLoop()
@@ -32,12 +36,44 @@ namespace OnlineOrderSystem
 
                 if (choice == 1)
                 {
-                    // lägg till ny beställning till listan
+                    orders.Add(new OnlineOrder("electric bicycle"));
                 }
                 else if (choice == 2)
                 {
-                    // lägg till ny beställning till listan
+                    orders.Add(new OnlineOrder("trampoline"));
                 }
+                else if (choice == 3)
+                {
+                    orders.Add(new OnlineOrder("bouquet"));
+                }
+                else if (choice == 4)
+                {
+                    Console.Write("Type in order: ");
+                    string articleName = Console.ReadLine();
+                    orders.Add(new OnlineOrder(articleName));
+                }
+                else if (choice == 6)
+                {
+                    // TODO lägg till en dictionary itemRecord som har nyckeltyp 'string' och värdetyp 'int'
+                    Dictionary<string, int> itemRecord = new Dictionary<string, int>();
+
+                    foreach (var order in orders)
+                    {
+                        if (!itemRecord.ContainsKey(order.Name))
+                        {
+                            itemRecord[order.Name] = 1;
+                        }
+                        else
+                        {
+                            itemRecord[order.Name] += 1;
+                        }
+
+                        Console.WriteLine(order.Name);
+                        Console.WriteLine(itemRecord[order.Name]);
+                        Console.ReadKey();
+                    }
+                }
+
                 else if (choice == 7)
                 {
                     break;
